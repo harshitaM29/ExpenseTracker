@@ -15,6 +15,17 @@ function test(event)
    
     showOnScreen(myObj);
 }
+window.addEventListener("DOMContentLoaded", () => {
+    const keys = Object.keys(localStorage);
+    for(let i=0;i<keys.length;i++)
+    {
+        const key = keys[i];
+        const strObj = localStorage[key];
+        const obj = JSON.parse(strObj);
+        showOnScreen(obj)
+    }
+    
+})
 function showOnScreen(myObj)
 {
     let myObj_dserialized = JSON.parse(localStorage.getItem(myObj.des));
