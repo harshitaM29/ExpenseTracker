@@ -65,13 +65,23 @@ function showOnScreen(myObj)
     btnEdit.addEventListener("click", function(e){
         
                 
-                    localStorage.removeItem(myObj.des);
+                    
                     var li = e.target.parentElement;
                     var item = document.getElementById('list');
                     item.removeChild(li);
-                   document.getElementById('amount').value = myObj.amt;
-                   document.getElementById('description').value = myObj.des;
-                   document.getElementById('category').value = myObj.cat;
+                   document.getElementById('amount').value = myObj.amount;
+                   document.getElementById('description').value = myObj.description;
+                   document.getElementById('category').value = myObj.category;
+                   var form = document.getElementById('form');
+                   form.onsubmit = async(event) => {
+                    event.preventDefault();
+                   const res = await axios.put(`http://localhost:4000/edit-expenses/${myObj.id}`, {
+                        description:document.getElementById('description').value,
+                        amount:document.getElementById('amount').value,
+                        category:document.getElementById('category').value
+                   });
+                    showOnScreen(res.data)
+                   }
 
                     
                 
