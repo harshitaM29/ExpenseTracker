@@ -48,7 +48,7 @@ function showOnScreen(myObj)
     btn.addEventListener("click", function(e){
         if(confirm('are you sure'))
                 {
-                    localStorage.removeItem(myObj.des);
+                    axios.delete(`http://localhost:4000/expenses/${myObj.id}`)
                     var li = e.target.parentElement;
                     //console.log(li)
                     var item = document.getElementById('list'); 
