@@ -1,40 +1,45 @@
 function test(event)
 {
     event.preventDefault();
-    var amt = document.getElementById('amount').value;
-    var des = document.getElementById('description').value;
-    var cat = document.getElementById('category').value;
+    var amount = document.getElementById('amount').value;
+    var description = document.getElementById('description').value;
+    var category = document.getElementById('category').value;
 
-    let myObj = {amt,des,cat};
+    let myObj = {description,amount,category};
     
     
-    let myObj_serialized = JSON.stringify(myObj)
-    console.log(myObj.des)
+    // let myObj_serialized = JSON.stringify(myObj)
+    // console.log(myObj.des)
 
-    localStorage.setItem(myObj.des,myObj_serialized)
+    // localStorage.setItem(myObj.des,myObj_serialized)
+    axios.post('http://localhost:4000/expenses', myObj)
+    .then(response => {
+        
+        showOnScreen(response.data);
+    })
+    .catch(err => console.log(err))
    
-    showOnScreen(myObj);
+    // showOnScreen(myObj);
 }
 window.addEventListener("DOMContentLoaded", () => {
-    const keys = Object.keys(localStorage);
-    for(let i=0;i<keys.length;i++)
-    {
-        const key = keys[i];
-        const strObj = localStorage[key];
-        const obj = JSON.parse(strObj);
-        showOnScreen(obj)
+    axios.get('http://localhost:4000/expenses')
+    .then(response => {
+        for(let i=0;i<response.data.length;i++)
+        {
+            showOnScreen(response.data[i]);
     }
+    })
+    .catch(err => console.log(err));
+    
+    
     
 })
 function showOnScreen(myObj)
 {
-    let myObj_dserialized = JSON.parse(localStorage.getItem(myObj.des));
-    var am = myObj_dserialized.amt
-    var a = myObj_dserialized.des;
-    var b = myObj_dserialized.cat;
+    
     var ul = document.getElementById('list');
     var li = document.createElement('li');
-    li.textContent = "Amount = " + am + " Description = " + a + " Category = " + b;
+    li.textContent = "Amount = " + myObj.amount + " Description = " + myObj.description + " Category = " + myObj.category;
     li.style.fontWeight = 'bold'
     ul.append(li);
     var btn = document.createElement('button');
@@ -45,6 +50,7 @@ function showOnScreen(myObj)
                 {
                     localStorage.removeItem(myObj.des);
                     var li = e.target.parentElement;
+                    //console.log(li)
                     var item = document.getElementById('list'); 
                     item.removeChild(li);
                 }
